@@ -1,0 +1,69 @@
+services:
+  flask_web:
+    build:
+      context: ./App/web
+    container_name: flask_web
+    ports:
+      - "5010:5000"
+    depends_on:
+      - mariadb
+    networks:
+      - mynetwork
+
+  flask_chat:
+    build:
+      context: ./App/chat
+    container_name: flask_chat
+    ports:
+      - "5011:5000"
+    depends_on:
+      - mariadb
+    networks:
+      - mynetwork
+    restart: on-failure
+
+  flask_api:
+    build:
+      context: ./App/api
+    container_name: flask_api
+    ports:
+      - "5012:5000"
+    depends_on:
+      - mariadb
+    networks:
+      - mynetwork
+    restart: on-failure
+
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: flask_database
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    networks:
+      - mynetwork
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: usuario
+      PMA_PASSWORD: password
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

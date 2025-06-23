@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <title>SVAIA - {% block title %}{% endblock %}</title>
+    {% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+      <div class="container-fluid">
+        <div>
+          <img src="{{ url_for('static', filename='Imagen1.png') }}" alt="JumeX">
+          <a class="navbar-brand" href="/">SVAIA</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Inicio
+                <span class="visually-hidden">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Características</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">Precios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">CVE</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto d-none d-lg-flex">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('chat') }}">Chat</i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-envelope"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('login') }}"><i class="fas fa-user"></i></a>
+            </li>
+          </ul>
+          <div class="navbar-nav">
+            {% if usuario %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+     data-bs-toggle="dropdown" aria-expanded="false" style="max-width: 190px;">
+
+    <span class="text-truncate me-1" style="max-width: 140px;">Bienvenido, {{ usuario.nombre }}</span>
+
+  </a>
+              <ul class="dropdown-menu dropdown-menu" aria-labelledby="userDropdown">
+                {% if usuario.es_admin %}
+                  <li><a class="dropdown-item" href="{{ url_for('usuarios') }}">Usuarios</a></li>
+                {% endif %}
+                <li><a class="dropdown-item" href="{{ url_for('listar_proyectos') }}">Proyectos</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+              </ul>
+            </li>
+            {% else %}
+              <a class="nav-link" href="{{ url_for('login') }}">Mi Cuenta</a>
+            {% endif %}
+          </div>
+          <form class="d-flex">
+            <input class="form-control me-sm-2" type="search" placeholder="Describe tu proyecto..." aria-label="Search" name="mensaje">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Comenzar</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer" class="row bg-primary p-5 justify-content-evenly mx-0">
+      {% block footer %}
+      <div class="col-3 card bg-primary border-0" style="width: fit-content;">
+        <h3 class="fw-bold text-white fs-5 card-header">Redes sociales</h3>
+        <ul class="social-icons list-unstyled list-inline card-body">
+          <li class="list-inline-item"><a target="_blank" href="https://x.com"><i class="fa-brands fa-x-twitter fs-4"></i></a></li>
+          <li class="list-inline-item"><a target="_blank" href="https://facebook.com"><i class="fa-brands fa-facebook fs-4"></i></a></li>
+          <li class="list-inline-item"><a target="_blank" href="https://linkedin.com"><i class="fa-brands fa-linkedin fs-4"></i></a></li>
+          <li class="list-inline-item"><a target="_blank" href="https://discord.com"><i class="fa-brands fa-discord fs-4"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-3 card bg-primary border-0" style="width: fit-content; color: #57c5a6">
+        <h3 class="fw-bold text-white fs-5 card-header">SVAIA</h3>
+        <a class="text-decoration-none card-body" target="_blank" href="https://www.google.com/maps/place/E.T.S.+de+Ingenier%C3%ADa+Inform%C3%A1tica/@36.7150229,-4.4782537,1484m/data=!3m2!1e3!4b1!4m6!3m5!1s0xd72f74b9f3606f1:0x9fa32cc2e6b0bbf9!8m2!3d36.7150229!4d-4.4782537!16s%2Fg%2F121pkpmh?entry=ttu&g_ep=EgoyMDI1MDMxMC4wIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D">ETSI Informática <br> <br>Universidad de Málaga <br> Bulevar Louis Pasteur, 35 <br>29071 Málaga <br> España</a>
+        <hr style="border-color: #0b1115;">
+        <div><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d5199.743298932378!2d-4.47805643714841!3d36.71412858060071!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1ses!2ses!4v1741390716646!5m2!1ses!2ses" width="205" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" id="mapa"></iframe></div>
+      </div>
+      <div class="col-3 card bg-primary border-0" style="width: fit-content;">
+        <h3 class="fw-bold text-white fs-5 card-header">Producto</h3>
+        <ul class="list-unstyled card-body">
+          <li><a class="text-decoration-none" href="{% if usuario %}/chat{% else %}/login{% endif %}">SVAIA Chat</a></li>
+          <li><a href="#" class="text-decoration-none">SVAIA API</a></li>
+          <li><a href="#" class="text-decoration-none">Vulnerabilidades</a></li>
+          <li><a href="#tabla-precios" class="text-decoration-none">Precios</a></li>
+          <li><a href="#" class="text-decoration-none">Estado del servicio</a></li>
+        </ul>
+      </div>
+      <div class="col-3 card bg-primary border-0" style="width: fit-content;">
+        <h3 class="fw-bold text-white fs-5 card-header">Legal</h3>
+        <ul class="list-unstyled text-decoration-none card-body">
+          <div id="legal">
+            <li><a href="#" class="text-decoration-none">Política de privacidad</a></li>
+            <li><a href="#" class="text-decoration-none">Términos de uso</a></li>
+            <li><a href="#" class="text-decoration-none">Trabaja con nosotros</a></li>
+          </div>
+          <hr style="border-color: #0b1115;">
+          <div><li><a href="#" class="text-decoration-none">Contacto</a></li></div>
+        </ul>
+      </div>
+      {% endblock %}
+    </div>
+    <div class="row text-center mx-0 py-1 pb-0">
+      <p class="copyright align-items-center">&copy;2025 SVAIA. Todos los derechos reservados</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

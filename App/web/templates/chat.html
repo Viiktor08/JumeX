@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+  <div class="container-fluid px-5" style="background: radial-gradient(circle at 0% 0%, white, #7A8998);">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+        <li class="breadcrumb-item active">Chat</li>
+    </ol>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible alert-{{ category }}">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                {% if category == 'success' %}
+                <h4 class="alert-heading">Éxito!</h4>
+                {% elif category == 'danger' %}
+                <h4 class="alert-heading">Error!</h4>
+                {% elif category == 'warning' %}
+                <h4 class="alert-heading">Atención!</h4>
+                {% elif category == 'info' %}
+                <h4 class="alert-heading">Información</h4>
+                {% elif category == 'primary' %}
+                <h4 class="alert-heading">Información importante</h4>
+                {% elif category == 'secondary' %}
+                <h4 class="alert-heading">Notificación</h4>
+                {% elif category == 'dark' %}
+                <h4 class="alert-heading">Aviso serio</h4>
+                {% endif %}
+                <p class="mb-0"> {{ message }} <a href="#" class="alert-link"></a></p>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="container-fluid">
+        <div class="row justify-content-around">
+            <div class="d-flex flex-column col-xl-3 col-lg-12 bg-white rounded-2 border border-1 border-secondary my-4" style="height: fit-content;">
+                <div class="text-end py-3">
+                  <a type="button" class="btn btn-success" href="{{ url_for('nuevo_proyecto', next=request.path) }}"><i class="fa-solid fa-plus-large">+</i></a>
+                </div>
+                <div class="list-group mb-3 border border-secondary d-none d-xl-flex" id="contenedor-proyectos">
+                  {% for proyecto in proyectos %}
+                      <div class="list-group-item d-flex justify-content-between contenedor-proyecto {% if proyecto.id == proyecto_activo_id %}active{% endif %}" data-id="{{ proyecto.id }}" data-reporte="{{ proyecto.ruta_ultimo_reporte }}" style="padding-right: 30px; cursor: pointer;">                      <div>
+                          <a href="#" class="list-group-item border border-0 {% if proyecto.id == proyecto_activo_id %}active{% endif %}"  data-id="{{ proyecto.id }}" style="max-width: 130px; overflow: hidden; text-overflow: ellipsis;"> {{ proyecto.nombre }}</a>
+                      </div>
+
+                      <div>
+                          {% if usuario.es_admin %}
+                              <span class="badge bg-secondary rounded-pill nombre-admin" title="{{ proyecto.usuario_id }}">
+                                  {{ proyecto.usuario_id }}
+                              </span>
+                          {% endif %}
+                          <a class="btn btn-secondary d-none boton-editar" href="{{ url_for('editar_proyecto', id=proyecto.id) }}"><i class="fa-solid fa-square-pen"></i></a>
+                          <a class="btn btn-danger d-none boton-eliminar" href="{{ url_for('eliminar_proyecto', id=proyecto.id) }}"><i class="fas fa-trash"></i></a>
+                      </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <select class="form-select d-flex d-xl-none" id="exampleSelect1">
+                      <option disabled selected>Selecciona un proyecto</option>
+                    {% for proyecto in proyectos %}
+                      <option value="{{ url_for('editar_proyecto', id=proyecto.id) }}">{{proyecto.nombre}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+            </div>
+            <div class="col-xl-8 col-lg-12 bg-white rounded-2 border border-1 border-secondary mt-4 mb-5 px-0 overflow-hidden" style="height: 45em;">
+              <div id="chat_box" style="height: 41.6em; overflow-y:auto; overflow-x: hidden;">
+                <div class="row p-5 gap-2" id="chatBody">
+
+                </div>
+              </div>
+              <div class="p-2 px-3" style="background-color: #F8F8F8;">
+                <div class="row">
+                  <div class="input-group col-12 chat-input" style="background-color: #F8F8F8;">
+                    <input type="text" class="form-control" id="userInput" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje..." aria-describedby="button-addon2">
+                    
+                    <button class="btn btn-primary" onclick="sendMessage()" type="button" id="button-addon2">Enviar</button>
+                    
+                    <!-- Botón personalizado para subir archivo -->
+                    <input type="file" id="sbomFile" accept=".json" style="display: none;">
+                    <button class="btn btn-secondary ms-2" onclick="document.getElementById('sbomFile').click()">Subir SBOM</button>
+                    <button class="btn btn-warning" id="btnAnalizarSBOM">Analizar SBOM</button>
+                    <a id="btnDescargarReporte" class="btn btn-success ms-2 d-none" href="">Descargar último reporte</a>                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

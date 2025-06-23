@@ -1,0 +1,67 @@
+{% extends "proyectos.html" %}
+{% block title %}Proyectos{% endblock %}
+{% block proyectos %}
+<div class="bg-white rounded-2 border border-1 border-secondary d-flex flex-column" style="height: 55em;">
+    <div class="container-fluid p-5 d-flex flex-column flex-grow-1" style="height: 55em;">
+      <div class="d-grid mb-4">
+        <div class="bg-primary text-center text-white py-2 rounded-2 fs-5">Nuevo proyecto</div>
+      </div>
+      <form method="POST" class="d-flex flex-column justify-content-between">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre del proyecto</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Nombre" required class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea id="descripcion" name="descripcion" rows="5" placeholder="Describa aquí su proyecto" class="form-control" style="height: 223px; resize: none; overflow-y: auto;"></textarea>
+        </div>
+        <div class="mb-4">
+          <fieldset>
+            <legend><strong>Configuración de Criterios de Aceptabilidad</strong></legend>
+
+            <!-- 1. Número total de vulnerabilidades -->
+            <div class="criterio">
+              <h4>Criterio 1: Número total de vulnerabilidades</h4>
+              <label for="vuln_total_max">Máximo permitido:</label>
+              <input type="number" id="vuln_total_max" name="vuln_total_max" min="0" required>
+            </div>
+
+            <!-- 2. Solucionabilidad -->
+            <div class="criterio">
+              <h4>Criterio 2: Solucionabilidad de vulnerabilidades</h4>
+              <label for="solucionabilidad_min">Porcentaje mínimo de solución requerido (%):</label>
+              <input type="number" id="solucionabilidad_min" name="solucionabilidad_min" min="0" max="100" step="1" required>
+            </div>
+
+            <!-- 3. Nivel máximo -->
+            <div class="criterio">
+              <h4>Criterio 3: Nivel máximo de vulnerabilidades</h4>
+              <label for="nivel_maximo">Selecciona el nivel máximo aceptado:</label>
+              <select id="nivel_maximo" name="nivel_maximo" required>
+                <option value="" disabled selected>Elige una opción</option>
+                <option value="bajo">Bajo</option>
+                <option value="medio">Medio</option>
+                <option value="alto">Alto</option>
+                <option value="critico">Crítico</option>
+              </select>
+            </div>
+
+            <!-- 4. Cálculo combinado -->
+            <div class="criterio">
+              <h4>Criterio 4: Cálculo combinado</h4>
+              <label for="formula_combinada">Fórmula o expresión de cálculo (ej: 0.5*total + 0.3*solucionabilidad):</label>
+              <input type="text" id="formula_combinada" name="formula_combinada" placeholder="Ej: 0.5*total + 0.3*sol + 0.2*nivel" >
+            </div>
+
+          </fieldset>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk me-2"></i>Guardar Proyecto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>  
+{% endblock %}
+    

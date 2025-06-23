@@ -1,0 +1,82 @@
+{% extends "proyectos.html" %}
+{% block title %}Editar proyecto{% endblock %}
+{% block proyectos %}
+<div class="bg-white rounded-2 border border-1 border-secondary d-flex flex-column" style="height: 70em;">
+    <div class="container-fluid p-5 d-flex flex-column flex-grow-1" style="height: 70em;">
+      <div class="d-grid mb-4">
+        <div class="bg-primary text-center text-white py-2 rounded-2 fs-5">Editar proyecto</div>
+      </div>
+      <form method="POST" class="d-flex flex-column justify-content-between">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre del proyecto</label>
+          <input type="text" id="nombre" name="nombre" value="{{ proyecto.nombre }}" placeholder="Nombre" required class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="fecha" class="form-label">Fecha de creación</label>
+          <input type="date" id="fecha" name="fecha" value="{{ proyecto.fecha }}" placeholder="Fecha" disabled class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea id="descripcion" name="descripcion" rows="5" placeholder="Describa aquí su proyecto" class="form-control" style="height: 150px; resize: none; overflow-y: auto;">{{ proyecto.descripcion }}</textarea>
+        </div>
+        <div class="mb-4">
+          <label for="sbom" class="form-label"><strong>Archivo SBOM asociado:</strong></label>
+          {% if sbom %}
+            <p class="form-control-plaintext">{{ sbom.nombre }}</p>
+          {% else %}
+            <p class="text-muted">No hay ningún SBOM asociado a este proyecto.</p>
+          {% endif %}
+        </div>
+
+
+        <div class="mb-4">
+          <fieldset>
+            <legend><strong>Configuración de Criterios de Aceptabilidad</strong></legend>
+
+            <!-- 1. Número total de vulnerabilidades -->
+            <div class="criterio">
+              <h4>Criterio 1: Número total de vulnerabilidades</h4>
+              <label for="vuln_total_max">Máximo permitido:</label>
+              <input type="number" id="vuln_total_max" name="vuln_total_max" min="0" value="{{ proyecto.vuln_total_max }}" required class="form-control">
+            </div>
+
+            <!-- 2. Solucionabilidad -->
+            <div class="criterio">
+              <h4>Criterio 2: Solucionabilidad de vulnerabilidades</h4>
+              <label for="solucionabilidad_min">Porcentaje mínimo de solución requerido (%):</label>
+              <input type="number" id="solucionabilidad_min" name="solucionabilidad_min" min="0" max="100" step="1" value="{{ proyecto.solucionabilidad_min }}" required class="form-control">
+            </div>
+
+            <!-- 3. Nivel máximo -->
+            <div class="criterio">
+              <h4>Criterio 3: Nivel máximo de vulnerabilidades</h4>
+              <label for="nivel_maximo">Selecciona el nivel máximo aceptado:</label>
+              <select id="nivel_maximo" name="nivel_maximo" required class="form-control">
+                <option value="" disabled>Elige una opción</option>
+                <option value="bajo" {% if proyecto.nivel_maximo == 'bajo' %}selected{% endif %}>Bajo</option>
+                <option value="medio" {% if proyecto.nivel_maximo == 'medio' %}selected{% endif %}>Medio</option>
+                <option value="alto" {% if proyecto.nivel_maximo == 'alto' %}selected{% endif %}>Alto</option>
+                <option value="critico" {% if proyecto.nivel_maximo == 'critico' %}selected{% endif %}>Crítico</option>
+              </select>
+            </div>
+
+            <!-- 4. Cálculo combinado -->
+            <div class="criterio">
+              <h4>Criterio 4: Cálculo combinado</h4>
+              <label for="formula_combinada">Fórmula o expresión de cálculo (ej: 0.5*total + 0.3*solucionabilidad):</label>
+              <input type="text" id="formula_combinada" name="formula_combinada" value="{{ proyecto.formula_combinada }}" placeholder="Ej: 0.5*total + 0.3*sol + 0.2*nivel"  class="form-control">
+            </div>
+
+          </fieldset>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk me-2"></i>Guardar Cambios
+          </button>
+          <a class="btn btn-danger boton-eliminar" href="{{ url_for('eliminar_proyecto', id=proyecto['id']) }}"><i class="fas fa-trash"></i>  Eliminar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
