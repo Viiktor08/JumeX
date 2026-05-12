@@ -14,7 +14,8 @@ from datetime import datetime
 import logging
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyCtalRk2K-VMCkdf4_6JLPRl4guTlQnXOc")
+# Pon aquí tu key
+genai.configure(api_key="***")
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
